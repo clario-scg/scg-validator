@@ -1,0 +1,130 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: false
+  concurrency: 4
+
+# Output configuration (keep simple to avoid schema conflicts)
+
+# v2: code formatters live here (not under linters)
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+linters:
+  enable:
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - gosec
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - staticcheck     # replaces separate gosimple/stylecheck in v2
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+    - revive
+    - copyloopvar
+  disable:
+    - prealloc        # kept disabled like your original
+
+  # v2: all per-linter options go under linters.settings
+  settings:
+    depguard:
+      rules:
+        main:
+          files: ["**/*.go"]
+          allow:
+            - $gostd
+            - github.com/next-trace/scg-validator
+            - github.com/next-trace/scg-validator/contract
+            - github.com/next-trace/scg-validator/engine
+            - github.com/next-trace/scg-validator/errors
+            - github.com/next-trace/scg-validator/errors/single
+            - github.com/next-trace/scg-validator/errors/aggregate
+            - github.com/next-trace/scg-validator/facade
+            - github.com/next-trace/scg-validator/message
+            - github.com/next-trace/scg-validator/parser
+            - github.com/next-trace/scg-validator/registry/database
+            - github.com/next-trace/scg-validator/registry/password
+            - github.com/next-trace/scg-validator/registry/rules
+            - github.com/next-trace/scg-validator/rules
+            - github.com/next-trace/scg-validator/rules/acceptance
+            - github.com/next-trace/scg-validator/rules/authentication
+            - github.com/next-trace/scg-validator/rules/common
+            - github.com/next-trace/scg-validator/rules/comparison
+            - github.com/next-trace/scg-validator/rules/conditional
+            - github.com/next-trace/scg-validator/rules/control
+            - github.com/next-trace/scg-validator/rules/database
+            - github.com/next-trace/scg-validator/rules/file
+            - github.com/next-trace/scg-validator/rules/format
+            - github.com/next-trace/scg-validator/rules/inclusion
+            - github.com/next-trace/scg-validator/rules/types/boolean
+            - github.com/next-trace/scg-validator/rules/types/collection
+            - github.com/next-trace/scg-validator/rules/types/date
+            - github.com/next-trace/scg-validator/rules/types/numeric
+            - github.com/next-trace/scg-validator/rules/types/string
+            - github.com/next-trace/scg-validator/utils
+            - github.com/next-trace/scg-validator/validator
+            - github.com/google/uuid
+            - golang.org/x/text/unicode/norm
+
+    errcheck:
+      check-type-assertions: true
+
+    gocyclo:
+      min-complexity: 25
+
+    dupl:
+      threshold: 200
+
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+
+    misspell:
+      locale: US
+
+    lll:
+      line-length: 120
+
+    # NOTE: unused has no 'check-exported' option in v2 → removed
+    # unused: {}
+
+    unparam:
+      check-exported: false
+
+    nakedret:
+      max-func-lines: 30
+
+    # You had prealloc settings but the linter is disabled; omit to avoid schema noise.
+    # prealloc:
+    #   simple: true
+    #   range-loops: true
+    #   for-loops: true
+
+    # v2-supported subset for gosec. Avoid unsupported keys.
+    gosec:
+      severity: medium
+      confidence: medium
+
+    revive:
+      rules:
+        - name: exported
+          disabled: true
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
